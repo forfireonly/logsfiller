@@ -9,5 +9,8 @@
         <module name="logsfiller" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="logsfiller" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -42,7 +43,7 @@ public class Entry {
             "Tyler worked on using punctuation in sentences",
             "Tyler worked on starting sentences with the capital letter",
             "Tyler wrote CVC words in complete sentences",
-            "Tyler wrote multisyllabic words in sentences",
+            "Tyler wrote multi-syllabic words in sentences",
             "Tyler worked on writing complete sentences",
             "Tyler worked on correct punctuation in sentences",
             "Tyler worked on using exclamation point, question mark, and period in sentences"
@@ -90,11 +91,7 @@ public class Entry {
     };
 
     static String modificationsForrest = br + "Test/assignment modifications: Extra time, frequent repetition of instruction, modulating the voice while delivering instructions," + br + "using music while delivering instructions";
-
-    //static String[] servicesCraig = new String[] {"Finals"};
-
-    static String modificationsCraig = br + "Test/Assignment modificastions: Extra time to complete assignment/test, breaks as needed, shorten the assignment/test";
-
+    
     static String absent = "Student was absent";
     static String holiday = "No school";
 
@@ -105,27 +102,31 @@ public class Entry {
 
     public static void main(String[] args) throws IOException {
 
-        System.out.println("Enter date");
+        System.out.println("Enter date like this 8 19 2021");
         Scanner scn = new Scanner(System.in);
-        int date = scn.nextInt();
-        System.out.println("Enter month");
-        int month = scn.nextInt();
-        scn.nextLine();
 
-        //Tyler
-        System.out.println("Enter absenses for Tyler as TU W TH F separated by space");
+        String dateString = scn.nextLine();
+
+        String[] dateArray = dateString.split(" ");
+
+        LocalDate dateFriday = LocalDate.of(Integer.parseInt(dateArray[0]),Integer.parseInt(dateArray[1]),Integer.parseInt(dateArray[2]));
+
+        LocalDate dateThursday = dateFriday.minusDays(1);
+        LocalDate dateWednesday = dateFriday.minusDays(2);
+        LocalDate dateTuesday = dateFriday.minusDays(3);
+        LocalDate dateMonday = dateFriday.minusDays(4);
+
+        System.out.println("Enter absenses for Tyler as TU W TH M separated by space");
         String studentDays = scn.nextLine();
         String[] studentDaysArray = studentDays.split(" ");
         List<String> absensesTyler = Arrays.asList(studentDaysArray);
 
-        System.out.println("Enter the day that is off like Tu Wed Th Fr");
+        System.out.println("Enter the day that is off like Tu Wed Th Mon");
         String daysOffString = scn.nextLine();
         String[] daysOffArray = daysOffString.split(" ");
         List<String> daysOff = Arrays.asList(daysOffArray);
 
-        int dateBefore = date - 1;
-        int dateTwoDaysBefore = date - 2;
-        int dateThreeDaysBefore = date - 3;
+
 
         System.out.println("Is this a new quarter? ANSWER IN CAPITALS YES/NO");
         String answer = scn.nextLine();
@@ -134,13 +135,13 @@ public class Entry {
 
         //Tyler reading
         try {
-            PDDocument pDDocument = PDDocument.load(new File("/Users/annascott/Downloads/TylerMorganReadingCurrent.pdf"));
+            PDDocument pDDocument = PDDocument.load(new File("/Users/workw/SpedLogs/TylerMorganReadingCurrent2.pdf"));
             PDAcroForm pDAcroForm = pDDocument.getDocumentCatalog().getAcroForm();
-            PDField field = pDAcroForm.getField("txt_5");
-            if (absensesTyler.contains("TU")) {
-                field.setValue(absent);
-            } else if (daysOff.contains("Tu")) {
+            PDField field = pDAcroForm.getField("date_Mon");
+            /*if (daysOff.contains("Tu")) {
                 field.setValue(holiday);
+            } else if (absensesTyler.contains("TU")) {
+                field.setValue(absent);
             } else {
                 field.setValue(getRandom(servicesTylerReading));
             }
@@ -167,23 +168,19 @@ public class Entry {
                 field.setValue(holiday);
             } else {
                 field.setValue(getRandom(servicesTylerReading));
-            }
-            field = pDAcroForm.getField("txt_4");
-            field.setValue(month + "/" + date + "/" + 21);
-            field = pDAcroForm.getField("txt_9");
+            }*/
+            //field = pDAcroForm.getField("date_Mon");
+            field.setValue(String.valueOf(dateMonday));
+            /*field = pDAcroForm.getField("txt_9");
             field.setValue(month + "/" + date + "/" + 21);
             field = pDAcroForm.getField("txt_3");
             field.setValue(month + "/" + dateBefore + "/" + 21);
             field = pDAcroForm.getField("txt_2");
-            if (date == 2 && month == 4) {
-                month = 3;
-                dateTwoDaysBefore = 30;
-                dateThreeDaysBefore = 29;
-            }
+
             field.setValue(month + "/" + dateTwoDaysBefore + "/" + 21);
             field = pDAcroForm.getField("txt_1");
-            field.setValue(month + "/" + dateThreeDaysBefore + "/" + 21);
-            pDDocument.save("/Users/annascott/Downloads/TylerMorganReadingCurrent2.pdf");
+            field.setValue(month + "/" + dateThreeDaysBefore + "/" + 21);*/
+            pDDocument.save("/Users/workw/SpedLogs/TylerMorganReadingCurrent3.pdf");
             pDDocument.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -194,13 +191,13 @@ public class Entry {
             PDDocument document = new PDDocument();
 
             //Saving the document
-            document.save("/Users/annascott/Downloads/TylerMorganReading.pdf");
+            document.save("/Users/workw/SpedLogs/TylerMorganReading.pdf");
             document.close();
 
 
         }
-        File file1 = new File("/Users/annascott/Downloads/TylerMorganReading.pdf");
-        File file2 = new File("/Users/annascott/Downloads/TylerMorganReadingCurrent2.pdf");
+        File file1 = new File("/Users/workw/SpedLogs/TylerMorganReading.pdf");
+        File file2 = new File("/Users/workw/SpedLogs/TylerMorganReadingCurrent3.pdf");
 
         //Instantiating PDFMergerUtility class
         PDFMergerUtility PDFmerger = new PDFMergerUtility();
@@ -215,14 +212,14 @@ public class Entry {
         //Merging the two documents
         PDFmerger.mergeDocuments();
         file2.deleteOnExit();
-        File oldName = new File("/Users/annascott/Downloads/TylerMorganReadingUpdated.pdf");
-        File newName = new File("/Users/annascott/Downloads/TylerMorganReading.pdf");
+        File oldName = new File("/Users/workw/SpedLogs/TylerMorganReadingUpdated.pdf");
+        File newName = new File("/Users/workw/SpedLogs/TylerMorganReading.pdf");
 
         oldName.renameTo(newName);
         oldName.deleteOnExit();
 
         //Tyler math
-        try {
+        /*try {
             PDDocument pDDocument = PDDocument.load(new File("/Users/annascott/Downloads/TylerMorganMathCurrent.pdf"));
             PDAcroForm pDAcroForm = pDDocument.getDocumentCatalog().getAcroForm();
             PDField field = pDAcroForm.getField("txt_5");
@@ -400,7 +397,7 @@ public class Entry {
         oldName.deleteOnExit();
 
         //Forrest
-        System.out.println("Enter days when Forrest was absent as TU W TH F separated by space");
+        System.out.println("Enter days when Forrest was absent as TU W TH M separated by space");
         studentDays = scn.nextLine();
         studentDaysArray = studentDays.split(" ");
         List<String> absensesForrest = Arrays.asList(studentDaysArray);
@@ -670,43 +667,12 @@ public class Entry {
         oldName.renameTo(newName);
         oldName.deleteOnExit();
 
-        //Craig
-
-        System.out.println("Enter absenses for Craig as TU W TH F separated by space");
-        studentDays = scn.nextLine();
-        studentDaysArray = studentDays.split(" ");
-        List<String> absensesCraig = Arrays.asList(studentDaysArray);
-
-        //New Quarter
-        if (answer.equals("YES")) {
-            PDDocument document = new PDDocument();
-
-            //Saving the document
-            document.save("/Users/annascott/Downloads/CraigNotsinnehReading.pdf");
-            document.close();
 
 
-        }
-        file1 = new File("/Users/annascott/Downloads/CraigNotsinnehReading.pdf");
-        file2 = new File("/Users/annascott/Downloads/CraigNotsinnehReadingCurrent2.pdf");
+      */
 
-        //Instantiating PDFMergerUtility class
-        PDFmerger = new PDFMergerUtility();
 
-        //Setting the destination file
-        PDFmerger.setDestinationFileName("/Users/annascott/Downloads/CraigNotsinnehReadingUpdated.pdf");
 
-        //adding the source files
-        PDFmerger.addSource(file1);
-        PDFmerger.addSource(file2);
-
-        //Merging the two documents
-        PDFmerger.mergeDocuments();
-        file2.deleteOnExit();
-        oldName = new File("/Users/annascott/Downloads/CraigNotsinnehReadingUpdated.pdf");
-        newName = new File("/Users/annascott/Downloads/CraigNotsinnehReading.pdf");
-        oldName.renameTo(newName);
-        oldName.deleteOnExit();
 
 
 
